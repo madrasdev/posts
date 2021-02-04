@@ -47,6 +47,6 @@ jobs:
           source_file: $FILES
           destination_repo: 'madrasdev/blog'
           destination_folder: 'content/post'
-          user_email: 'niranjansonachalam@gmail.com'
+          user_email: 'niranjan2020@gmail.com'
           user_name: 'sniranjan'
           commit_message: 'A blog post by ${{ github.actor }}'    
