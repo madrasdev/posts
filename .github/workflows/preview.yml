@@ -23,7 +23,7 @@ jobs:
           src_path: /.
           file_filter: "*.md"
           exclude: "README.md"
-          dst_path: /content/post
+          dst_path: /content/post/
           dst_owner: madrasdev
           dst_repo_name: blog      
         
