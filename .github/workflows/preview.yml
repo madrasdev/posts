@@ -20,7 +20,7 @@ jobs:
         uses: andstor/copycat-action@v3
         with:
           personal_token: ${{ secrets.API_TOKEN_GITHUB }}
-          src_path: /.
+          src_path: "."
           file_filter: "*.md"
           exclude: "README.md"
           dst_path: /content/post/
