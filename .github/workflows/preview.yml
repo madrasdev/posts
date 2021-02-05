@@ -1,9 +1,7 @@
-name: PREVIEW
-
-# Controls when the action will run. 
+name: Deploy
 on:
-  # Triggers the workflow on pull request only for the main branch
-  pull_request:
+  # Triggers the workflow on push actions on main branch
+  push:
     branches: [ main ]
 
   # Allows you to run this workflow manually from the Actions tab
@@ -11,40 +9,21 @@ on:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
-  build:
-    # The type of runner that the job will run on
+  copy-files:
     runs-on: ubuntu-latest
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       - name: Checkout
         uses: actions/checkout@v2   
         
-      - name: Identify updated file
-        run: |
-          URL="https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}/files"
-          FILES=$(curl -s -X GET -G $URL | jq -r '.[] | .filename')
-          if echo $FILES | grep -q ".md"; then
-             if [ $FILES -eq 1 ]; then 
-                echo "File changed - $FILES"
-                echo $FILES
-             elif [ ${#i} -eq 3 ]; then
-                 echo "Invalid PR"
-             fi
-            echo "Markdown file changed"
-          else
-            echo "No Markdown file changed"
-          fi              
-        
-      - name: Move post to madrasdev/blog
-        uses: dmnemec/copy_file_to_another_repo_action@master
-        env:
-          API_TOKEN_GITHUB: ${{ secrets.API_TOKEN_GITHUB }}
+      - name: Copy posts from madrasdev/posts to madrasdev/blog
+        uses: andstor/copycat-action@v3
         with:
-          source_file: $FILES
-          destination_repo: 'madrasdev/blog'
-          destination_folder: 'content/post'
-          user_email: 'niranjansonachalam@gmail.com'
-          user_name: 'sniranjan'
-          commit_message: 'A blog post by ${{ github.actor }}'    
+          personal_token: ${{ secrets.API_TOKEN_GITHUB }}
+          src_path: /.
+          file_filter: "*.md"
+          exclude: "README.md"
+          dst_path: /content/post
+          dst_owner: sniranjan
+          dst_repo_name: madrasdev/blog      
+        
